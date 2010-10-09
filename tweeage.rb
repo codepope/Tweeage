@@ -7,9 +7,13 @@ require 'twitter'
 require 'erb'
 require "twitter-text"
 include Twitter::Autolink
+require "actionable"
+require "action"
+require "retweet"
 
 
 configure do  
+  Thread.abort_on_exception=true
   $oauth=nil
   $msg_queue=Queue.new
   $incoming_array=Array.new
@@ -55,7 +59,7 @@ configure do
   producer=Thread.new do 
     client = Twitter::Base.new($oauth)
     since_id=0
-    100.times do |i|
+    loop do
       j=0
       if(since_id==0)
         tweets=client.home_timeline
@@ -74,7 +78,7 @@ configure do
   end
   
   consumer=Thread.new do
-    10000.times do |i|
+    loop do
       if $msg_queue.empty?
         sleep(1)
       else
