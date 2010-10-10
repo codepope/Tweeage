@@ -1,4 +1,4 @@
-# Action will encapsulate a Tweet
+# Actionable will encapsulate a Tweet
 # It will include call on rules to decide if a tweet is actionable or not
 # It will retain a list of actions that could be taken on a tweet
 
