@@ -10,7 +10,6 @@
 	<% $action_array.reverse_each do |actionable| %>
 	    <% tweet=actionable.tweet %>
 		<% action=actionable.action %>
-		<% puts actionable.inspect %>
 		<div class="action_item">
 		<span class="action_tools"><a href=<%= "drop/#{tweet.id}" %>>Drop</a> <a href=<%= "action/#{action.action_name}/#{tweet.id}" %>><%= action.action_label%></a></span>
 		<span class="action_user_name"><%= tweet.user.screen_name %></span>:
