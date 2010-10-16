@@ -20,20 +20,38 @@ configure do
   $action_array=Array.new
   
   oauth_keys={}
-
-  if FileTest::exists?('oauth_keys')
-  	File.open('oauth_keys') do |file|
+  oauth_consumer={}
+  
+  # First, lets get the app keys... you'll want to register with Twitter for these
+  # until I obfuscate and add them
+  #
+  if FileTest::exists?('oauth_consumer.txt')
+    File.open('oauth_consumer.txt') do |file|
+      oauth_consumer=Marshal.load(file)
+    end
+  else
+    puts "Missing API secret and key"
+    puts "Enter secret:"
+    oauth_consumer["consumer_secret"]=STDIN.readline.chomp
+    puts "And now the key:"
+    oauth_consumer["consumer_key"]=STDIN.readline.chomp
+    
+  	File.open('oauth_consumer.txt','w') do |file|
+  		Marshal.dump(oauth_consumer,file)
+  	end
+  end
+  
+  # Ok, now we can get the user access keys
+  #
+  if FileTest::exists?('oauth_keys.txt')
+  	File.open('oauth_keys.txt') do |file|
   		oauth_keys=Marshal.load(file)
   	end
   else
-  	# Tweeage secret and key
-
-  	oauth_keys={ "consumer_secret"=>"WsWoKxpiph3ti7vzkLLs8uIe04BmlD5clE5Na8U5k",
-  "consumer_key"=>"HGQEPLQCLZLH0nPJezyfDQ" }
 
   	consumer = OAuth::Consumer.new(
-  	  oauth_keys["consumer_key"], 
-  	  oauth_keys["consumer_secret"], 
+  	  oauth_consumer["consumer_key"], 
+  	  oauth_consumer["consumer_secret"], 
   	  {:site => 'http://twitter.com'}
   	)
  
@@ -48,12 +66,12 @@ configure do
   	oauth_keys["access_token"]=access_token.token
   	oauth_keys["access_secret"]=access_token.secret
 
-  	File.open('oauth_keys','w') do |file|
+  	File.open('oauth_keys.txt','w') do |file|
   		Marshal.dump(oauth_keys,file)
   	end
   end
 
-  $oauth = Twitter::OAuth.new(oauth_keys["consumer_key"],oauth_keys["consumer_secret"])
+  $oauth = Twitter::OAuth.new(oauth_consumer["consumer_key"],oauth_consumer["consumer_secret"])
   $oauth.authorize_from_access(oauth_keys["access_token"], oauth_keys["access_secret"])
   
   producer=Thread.new do 
