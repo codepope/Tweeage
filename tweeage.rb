@@ -166,3 +166,13 @@ get '/action/:action_name/:tweet_id' do
   redirect '/'
 end
 
+get '/props/:tweet_id' do
+  # Find the tweet
+  tweet_id=params[:tweet_id].to_i
+  rslt=$action_array.select{ |actionable| actionable.tweet.id == tweet_id }
+  actionable=rslt[0]
+  @tweet=actionable.tweet
+  erb :props
+end
+
+

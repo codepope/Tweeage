@@ -11,7 +11,11 @@
 	    <% tweet=actionable.tweet %>
 		<% action=actionable.action %>
 		<div class="action_item">
-		<span class="action_tools"><a href=<%= "drop/#{tweet.id}" %>>Drop</a> <a href=<%= "action/#{action.action_name}/#{tweet.id}" %>><%= action.action_label%></a></span>
+		<span class="action_tools">
+			<a href=<%= "drop/#{tweet.id}" %>>Drop</a> 
+			<a href=<%= "action/#{action.action_name}/#{tweet.id}" %>><%= action.action_label%></a>
+			<a href=<%= "props/#{tweet.id}" %>>Props</a>
+		</span>
 		<span class="action_user_name"><%= tweet.user.screen_name %></span>:
 		<span class="action_tweet_text>"><%= auto_link(tweet.text) %></span>
 		<span class="action_tweet_date">(<%= tweet.created_at %> )</span>
