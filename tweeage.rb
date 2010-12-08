@@ -2,14 +2,14 @@
 
 require 'rubygems'
 require "sinatra"
-require 'oauth'
 require 'twitter'
+require 'oauth'
 require 'erb'
 require "twitter-text"
 include Twitter::Autolink
-require "actionable"
-require "action"
-require "retweet"
+require "./actionable"
+require "./action"
+require "./retweet"
 
 
 configure do  
@@ -71,11 +71,15 @@ configure do
   	end
   end
 
-  $oauth = Twitter::OAuth.new(oauth_consumer["consumer_key"],oauth_consumer["consumer_secret"])
-  $oauth.authorize_from_access(oauth_keys["access_token"], oauth_keys["access_secret"])
+  Twitter.configure do |config|
+    config.consumer_key = oauth_consumer["consumer_key"]
+    config.consumer_secret = oauth_consumer["consumer_secret"]
+    config.oauth_token = oauth_keys["access_token"]
+    config.oauth_token_secret = oauth_keys["access_secret"]
+  end
   
   producer=Thread.new do 
-    client = Twitter::Base.new($oauth)
+    client = Twitter::Client.new
     since_id=0
     loop do
       j=0

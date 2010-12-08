@@ -1,36 +1,14 @@
 <html>
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-	<link href="/props.css" rel="stylesheet" type="text/css">
+	<link href="stylesheets/props.css" rel="stylesheet" type="text/css">
 	<title>Tweeage</title></head>
   <body>
 	<div class="prop_list">
-	<% @tweet.each_pair do |key,value| %>	    
+	<% @tweet.each_dotted_name do |key| %>	    
 		<div class="prop_item">
-		<span class="prop_key"><%= key %></span>:
-		<% if !value.nil? && value.is_a?(Hashie::Mash) %>
-			<div class="sub_prop_list">
-					<% value.each_pair do |subkey,subvalue| %>
-						<div class="sub_prop_item">
-						<span class="sub_prop_key"><%= subkey %>:</span>
-						<% if !subvalue.nil? && subvalue.is_a?(Hashie::Mash) %>
-							<div class="sub_sub_prop_list">
-									<% subvalue.each_pair do |subsubkey,subsubvalue| %>
-										<div class="sub_sub_prop_item">
-										<span class="sub_sub_prop_key"><%= subsubkey %>:</span>
-										<span class="sub_sub_prop_value"><%= subsubvalue %></span>
-										</div>
-									<% end %>
-							</div>
-						<% else %>
-							<span class="sub_prop_value"><%= subvalue %></span>
-						<% end %>
-						</div>
-					<% end %>
-			</div>
-		<% else %>	
-			<span class="prop_value"><%= value %></span>
-		<% end %>
+		<span class="prop_key"><%= key %></span>:	
+		<span class="prop_value"><%= @tweet.dotted_value(key) %></span>
 		</div>
 	<% end %>
 	</div>

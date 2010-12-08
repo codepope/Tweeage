@@ -1,0 +1,18 @@
+
+div.prop_list {
+	margin-left:10px;
+	width: 100%^;
+}
+
+div.prop_item {
+	padding:1px;
+	width: 100%;
+}
+
+span.prop_key {
+	width: 20%;
+}
+
+span.prop_value: {
+	width: 80%;
+}
