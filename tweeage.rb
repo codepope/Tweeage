@@ -120,7 +120,7 @@ configure do
 end
 
 get '/' do
-  erb :actionable
+  erb :tweeage
 end
 
 get '/drop/:tweet_id' do
@@ -147,8 +147,19 @@ get '/flush' do
   redirect '/'
 end
 
-get '/actionable/:tweet_id' do
-  tweet_id=params[:tweet_id].to_i
+get '/incoming' do
+  since_id=params[:since_id].to_i
+  new_incoming=$incoming_array.find_all{|incoming| incoming.id>since_id}
+  new_incoming.to_json
+end
+
+get '/actionable' do
+  $actionable_array.to_json
+end
+
+post '/actionable' do
+  tweet_id=params[:tweet_id_str].to_i
+  puts tweet_id
   rslt=$incoming_array.select{ |tweet| tweet.id == tweet_id }
   tweet=rslt[0]
   actionable=Actionable.new
@@ -156,9 +167,9 @@ get '/actionable/:tweet_id' do
   actionable.action=Retweet.new
   $action_array << actionable
   $incoming_array.delete(tweet)
-  redirect '/'
+  tweet.to_json
 end
-
+  
 get '/action/:action_name/:tweet_id' do
   # Find the tweet
   tweet_id=params[:tweet_id].to_i
@@ -167,7 +178,6 @@ get '/action/:action_name/:tweet_id' do
   tweet=actionable.tweet
   action=actionable.action
   action.do_action(tweet)
-  redirect '/'
 end
 
 get '/props/:tweet_id' do
