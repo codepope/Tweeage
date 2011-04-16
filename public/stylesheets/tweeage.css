@@ -1,0 +1,93 @@
+body {
+	font-family:Arial,Helvetica,sans-serif;
+}
+
+div.action_head {
+	padding:5px;
+	background-color:grey;
+	color: white;
+}
+
+div.action_list {
+	padding:10px;
+}
+
+div.action_item {
+	padding:1px;
+	height:40px;
+}
+
+span.action_user_name {
+	font-weight: bold;
+}
+
+
+div.menu_bar {
+	padding:10px;
+	background-color:#505050;
+	color: white;
+	font-size: 12px;
+}
+
+span.menu_unselected {
+	padding: 1px 5px 1px 5px;
+	border: solid 2px;
+}
+
+span.menu_selected {
+	padding: 1px 5px 1px 5px;
+	border: solid 2px;
+	font-size:14px;
+	font-style: bold;
+	color: green;
+	background: white;
+}
+
+span.menu_title {
+	font-size: 20px;
+	font-style: bold;
+	padding: 1px 10px 1px 1px;
+	color: white;
+}
+
+div.incoming_head {
+	padding:5px;
+	background-color:grey;
+	color: white;
+}
+
+
+div.incoming_list {
+	padding:10px;
+}
+
+div.incoming_item {
+	padding:1px 4px 1px 1px;
+	border-style: solid;
+	border-top-width: 1px;
+	border-bottom-width:0px;
+	border-left-width: 0px;
+	border-right-width: 0px;
+}
+
+div.incoming_item_alt {
+	padding:1px;
+	height:20px;
+	background-color:#ddd;
+}
+span.incoming_user_name {
+	font-weight: bold ;
+	font-size: small;
+	width: 100px;
+	padding-right:10px;
+}
+
+span.incoming_text {
+	font-size: smaller;
+}
+
+span.incoming_time {
+	padding-left:5px;
+	font-size: small;
+	font-style: italic;
+}

@@ -1,0 +1,82 @@
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+	<link href="stylesheets/tweeage.css" rel="stylesheet" type="text/css">
+	
+	<script type="text/javascript" src="js/jquery-1.5.2.js"></script>     
+	<script type="text/javascript" src="js/pretty.js"></script>
+	     
+ 	<script type="text/javascript">
+		$(document).ready(function() {
+			action_since_id=0;
+			incoming_since_id=0;
+			inc_ind=0;
+			
+			$.get("actionable", { since_id:action_since_id }, function(json) {
+			},"json");
+			
+			update_incoming()
+			
+			setInterval(function(){ $("span.incoming_time").prettyDate(); }, 5000);
+		});
+		
+		function update_incoming() {
+			$.get("incoming", { since_id:incoming_since_id }, function(json) {
+				for(i in json) {
+					tweet=json[i];
+					cls="";
+					$("#incoming_list").prepend("<div class='incoming_item' id='tweet_"+tweet.id_str+"'>"+
+					"<img src='icons/add.png' onClick='add_actionable(\""+tweet.id_str+"\")'/>"+
+					"<a href='delete_incoming(\""+tweet.id_str+")\"'><img src='icons/delete.png'></a>"+
+					"<span class='incoming_user_name'><a href='http://twitter.com/"+tweet.user.screen_name+"' target='_blank'>"+tweet.user.name+"</a></span>"+
+					"<span class='incoming_text'>"+auto_link(tweet.text)+"</span>"+
+					"<span class='incoming_time' title='"+tweet.created_at+"'>"+prettyDate(tweet.created_at)+"</span></div>");
+					if(tweet.id_str>incoming_since_id) incoming_since_id=tweet.id_str;
+				}
+				
+			},"json");
+			
+			setTimeout('update_incoming()', 10*1000)
+		}
+		
+		function add_actionable(tweet_id) {
+			$.post("actionable", { tweet_id_str:tweet_id }, function(tweet) {
+				$("div#tweet_"+tweet.id_str).remove();	
+				$("#action_list").prepend("<div class='action_item' id='atweet_"+tweet.id_str+"'>"+
+				"<span class='action_user_name'><a href='http://twitter.com/"+tweet.user.screen_name+"' target='_blank'>"+tweet.user.name+"</a></span>"+
+				"<span class='action_text'>"+auto_link(tweet.text)+"</span>"+
+				"<span class='action_time' title='"+tweet.created_at+"'>"+prettyDate(tweet.created_at)+"</span></div>");			
+			},"json");
+			
+		}
+		function auto_link(text) {
+			if(text.search(/(https?:\/\/[-\w\.]+:?\/[\w\/_\.]*(\?\S+)?)/) > -1) {
+		    text = text.replace(/(https?:\/\/[-\w\.]+:?\/[\w\/_\.]*(\?\S+)?)/, "<a href='$1' target='_blank'>$1</a>")
+		  }
+
+		  if(text.search(/@\w+/) > -1) {
+		    text = text.replace(/(@)(\w+)/g, "$1<a href='http://twitter.com/$2' target='_blank'>$2</a>");
+		  }
+		  return text
+		}
+ 	</script>
+	<title>Tweeage</title>
+	</head>
+  <body>
+	<div class="menu_bar">
+		<span class="menu_title">Tweeage</span>
+		<span class="menu_selected">Staging</span>
+		<span class="menu_unselected">Limbo</span>
+		<span class="menu_unselected">Rejects</span>
+		<span class="menu_unselected">Auditions</span>
+	</div>
+	<div class="action_head">Staging</div>
+	<div class="action_list" id="action_list">
+	</div>
+	<hr>
+	<div class="incoming_head">Limbo <a href="flush">Flush the stream</a></div>
+	<div class="incoming_list" id="incoming_list">
+	</div>
+  </body>
+</html>
+
